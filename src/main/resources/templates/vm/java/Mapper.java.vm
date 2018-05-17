@@ -1,0 +1,63 @@
+package ${package}.mapper;
+
+import ${package}.entity.${className}Entity;
+import java.util.List;	
+
+/**
+ * ${tableComment} 数据层
+ * 
+ * @author ${author}
+ * @date ${datetime}
+ */
+public interface ${className}Mapper
+{
+
+	/**
+     * 查询${tableComment}信息
+     * 
+     * @param ${primaryKey.attrname} ${tableComment}ID
+     * @return ${tableComment}信息
+     */
+	public ${className}Entity select${className}EntityById(${primaryKey.attrType} ${primaryKey.attrname});
+	
+	/**
+     * 查询${tableComment}列表
+     * 
+     * @param ${classname} ${tableComment}信息
+     * @return ${tableComment}集合
+     */
+	public List<${className}Entity> select${className}EntityList(${className}Entity ${classname});
+	
+	/**
+     * 新增${tableComment}
+     * 
+     * @param ${classname} ${tableComment}信息
+     * @return 结果
+     */
+	public int insert${className}Entity(${className}Entity ${classname});
+	
+	/**
+     * 修改${tableComment}
+     * 
+     * @param ${classname} ${tableComment}信息
+     * @return 结果
+     */
+	public int update${className}Entity(${className}Entity ${classname});
+	
+	/**
+     * 删除${tableComment}
+     * 
+     * @param ${primaryKey.attrname} ${tableComment}ID
+     * @return 结果
+     */
+	public int delete${className}EntityById(${primaryKey.attrType} ${primaryKey.attrname});
+	
+	/**
+     * 批量删除${tableComment}
+     * 
+     * @param ${primaryKey.attrname}s 需要删除的数据ID
+     * @return 结果
+     */
+	public int batchDelete${className}Entity(${primaryKey.attrType}[] ${primaryKey.attrname}s);
+	
+}

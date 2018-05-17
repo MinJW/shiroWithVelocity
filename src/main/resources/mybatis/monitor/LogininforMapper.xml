@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.JWmes.project.monitor.logininfor.mapper.LogininforMapper">
+
+	<resultMap type="LogininforEntity" id="LogininforEntityResult">
+		<id     property="infoId"      column="info_id"      />
+		<result property="loginName"   column="login_name"   />
+		<result property="status"      column="status"       />
+		<result property="ipaddr"      column="ipaddr"       />
+		<result property="browser"     column="browser"      />
+		<result property="os"          column="os"           />
+		<result property="msg"         column="msg"          />
+		<result property="loginTime"   column="login_time"    />
+	</resultMap>
+
+	<insert id="insertLogininforEntity" parameterType="LogininforEntity">
+		insert into sys_Logininfor (login_name, status, ipaddr, browser, os, msg)
+		values (#{loginName}, #{status}, #{ipaddr}, #{browser}, #{os}, #{msg})
+	</insert>
+	
+	<select id="selectLogininforEntityList" parameterType="LogininforEntity" resultMap="LogininforEntityResult">
+		select * from sys_Logininfor
+		<where>
+			<if test="searchValue != null and searchValue != ''">
+				AND login_name = #{searchValue}
+			</if>
+		</where>
+	</select>
+	
+	<delete id="batchDeleteLogininforEntity" parameterType="Integer">
+ 		delete from sys_Logininfor where info_id in
+ 		<foreach collection="array" item="infoId" open="(" separator="," close=")">
+ 			#{infoId}
+        </foreach> 
+ 	</delete>
+
+</mapper> 

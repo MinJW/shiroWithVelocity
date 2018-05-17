@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="${package}.mapper.${className}Mapper">
+    
+    <resultMap type="${className}Entity" id="${className}EntityResult">
+        #foreach ($column in $columns)
+        <result property="${column.attrname}"    column="${column.columnName}"    />
+        #end
+    </resultMap>
+    
+    <select id="select${className}EntityById" parameterType="${primaryKey.attrType}" resultMap="${className}EntityResult">
+        select #foreach($column in $columns) $column.columnName #if($velocityCount != $columns.size()),#end#end from ${tableName}
+        where ${primaryKey.columnName} = #{${primaryKey.attrname}}
+    </select>
+    
+    <select id="select${className}EntityList" parameterType="${className}Entity" resultMap="${className}EntityResult">
+        select #foreach($column in $columns) $column.columnName #if($velocityCount != $columns.size()),#end#end from ${tableName}
+        <where>  
+            #foreach($column in $columns)
+            <if test="$column.attrname != null and $column.attrname.trim() != ''"> and $column.columnName = #{$column.attrname} </if>
+            #end
+        </where>
+    </select>
+    
+    <insert id="insert${className}Entity" parameterType="${className}Entity"#if($primaryKey.extra == 'auto_increment') useGeneratedKeys="true" keyProperty="$primaryKey.attrname"#end>
+        insert into ${tableName}
+        (
+        #foreach($column in $columns)
+            #if($column.columnName != $primaryKey.columnName || $primaryKey.extra != 'auto_increment')
+                $column.columnName#if($velocityCount != $columns.size()), #end
+            #end
+        #end
+        )
+        values
+        (
+        #foreach($column in $columns)
+            #if($column.columnName != $primaryKey.columnName || $primaryKey.extra != 'auto_increment')
+                #{$column.attrname}#if($velocityCount != $columns.size()), #end
+            #end			
+        #end
+		)
+    </insert>
+	 
+    <update id="update${className}Entity" parameterType="${className}Entity">
+        update ${tableName} 
+        <set>
+        #foreach($column in $columns)
+            #if($column.columnName != $primaryKey.columnName)
+            <if test="$column.attrname != null">`$column.columnName` = #{$column.attrname}#if($velocityCount != $columns.size()), #end</if>
+            #end
+        #end
+        </set>
+        where ${primaryKey.columnName} = #{${primaryKey.attrname}}
+    </update>
+
+
+    <delete id="delete${className}EntityById" parameterType="${primaryKey.attrType}">
+        delete from ${tableName} where ${primaryKey.columnName} = #{value}
+    </delete>
+
+
+    <delete id="batchDelete${className}Entity" parameterType="${primaryKey.attrType}">
+        delete from ${tableName} where ${primaryKey.columnName} in 
+        <foreach item="${primaryKey.attrname}" collection="array" open="(" separator="," close=")">
+        #{${primaryKey.attrname}}
+        </foreach>
+    </delete>
+    
+</mapper>
